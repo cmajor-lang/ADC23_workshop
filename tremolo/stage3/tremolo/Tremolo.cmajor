@@ -1,0 +1,29 @@
+graph TremoloLFO [[ main ]]
+{
+    output stream float out;
+
+    input value float shape [[ name: "Shape", min: 0, max: 100, init:100 ]];
+    input event float rate  [[ name: "Rate", min: 0.1, max: 20, init:8, unit: "Hz" ]];
+    input event float depth [[ name: "Depth", min: 0, max: 100, init:100, unit: "%" ]];
+
+    event depth (float v)
+    {
+        triangleLFO.amplitudeIn <- v * 0.01f;
+        squareLFO.amplitudeIn <- v * 0.01f;
+    }
+
+    node triangleLFO = std::oscillators::LFO (std::oscillators::Shape::triangle);
+    node squareLFO   = std::oscillators::LFO (std::oscillators::Shape::square);
+    node lowPass     = std::filters::butterworth::Processor (std::filters::butterworth::Mode::lowPass, 30.0f);
+
+    connection
+    {
+        rate -> triangleLFO.rateHzIn, squareLFO.rateHzIn;
+
+        triangleLFO.out * shape * 0.01f -> out;
+        squareLFO.out * (1.0f - shape * 0.01f) -> lowPass.in;
+        lowPass.out -> out;
+    }
+}
+
+

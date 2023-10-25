@@ -1,0 +1,23 @@
+graph TremoloLFO [[ main ]]
+{
+    output stream float out;
+
+    input event float rate  [[ name: "Rate", min: 0.1, max: 20, init:8, unit: "Hz" ]];
+    input event float depth [[ name: "Depth", min: 0, max: 100, init:100, unit: "%" ]];
+
+    event depth (float v)
+    {
+        triangleLFO.amplitudeIn <- v * 0.01f;
+    }
+
+    node triangleLFO = std::oscillators::LFO (std::oscillators::Shape::triangle);
+
+    connection
+    {
+        rate -> triangleLFO.rateHzIn;
+
+        triangleLFO.out -> out;
+    }
+}
+
+
