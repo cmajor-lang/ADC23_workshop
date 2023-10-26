@@ -19,5 +19,3 @@ graph TremoloLFO [[ main ]]
         triangleLFO.out -> out;
     }
 }
-
-

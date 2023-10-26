@@ -25,5 +25,3 @@ graph TremoloLFO [[ main ]]
         lowPass.out -> out;
     }
 }
-
-
