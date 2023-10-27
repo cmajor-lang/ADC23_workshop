@@ -14,14 +14,14 @@ graph TremoloLFO [[ main ]]
 
     node triangleLFO = std::oscillators::LFO (std::oscillators::Shape::triangle);
     node squareLFO   = std::oscillators::LFO (std::oscillators::Shape::square);
-    node lowPass     = std::filters::butterworth::Processor (std::filters::butterworth::Mode::lowPass, 30.0f);
+    node lowPass     = std::filters::butterworth::Processor (std::filters::butterworth::Mode::lowPass, 50.0f);
 
     connection
     {
         rate -> triangleLFO.rateHzIn, squareLFO.rateHzIn;
 
-        triangleLFO.out * shape * 0.01f -> out;
-        squareLFO.out * (1.0f - shape * 0.01f) -> lowPass.in;
+        triangleLFO.out * (1.0f - shape * 0.01f) -> out;
+        squareLFO.out * shape * 0.01f -> lowPass.in;
         lowPass.out -> out;
     }
 }
