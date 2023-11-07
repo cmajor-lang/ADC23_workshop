@@ -1,13 +1,13 @@
 
 {
     "CmajorVersion":    1,
-    "ID":               "com.your_name.your_patch_ID",
+    "ID":               "dev.cmajor.adc23",
     "version":          "1.0",
     "name":             "Tremolo",
     "description":      "Tremolo",
-    "category":         "generator",
-    "manufacturer":     "Your Company Goes Here",
-    "isInstrument":     true,
+    "category":         "effect",
+    "manufacturer":     "Sound Stacks Ltd",
+    "isInstrument":     false,
 
     "source":           "Tremolo.cmajor"
 }
