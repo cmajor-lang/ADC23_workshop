@@ -1,2 +1,7 @@
 [
+    {
+        "frameOffset" : 0,
+        "value": 100,
+        "framesToReachValue": 0
+    }
 ]
