@@ -9,7 +9,7 @@
         import createPatchView from "./ui/index.js";
         import { createAudioWorkletNodePatchConnection } from "./TremoloWorklet.js";
 
-        async function start()
+        async function start (audioElement)
         {
             const audioContext = new AudioContext();
             audioContext.resume();
@@ -42,21 +42,8 @@
             const restoreStateButton = document.getElementById ("button-restore-state");
             restoreStateButton.addEventListener ("click", () => connection.sendFullStoredState (cachedFullState));
 
-            const audioElement = document.getElementById ("audio-player");
             const audioPlayer = new MediaElementAudioSourceNode (audioContext, {
                 mediaElement: audioElement,
-            });
-
-            const open = document.getElementById ("open-audio-file");
-            open.addEventListener ("change", (event) =>
-            {
-                const files = event.target.files || [];
-                if (files.length === 0)
-                    return;
-
-                audioElement.pause();
-                audioElement.src = URL.createObjectURL (files[0]);
-                audioElement.load();
             });
 
             audioPlayer.connect (node);
@@ -64,34 +51,46 @@
             node.connect (audioContext.destination);
         }
 
-        const startButton = document.getElementById ("button-start");
-
         let hasStarted = false;
-        startButton.addEventListener ("click", async () =>
+        const startAudioIfNecessary = async (audioElement) =>
         {
             if (hasStarted)
                 return;
 
             try
             {
-                await start();
+                await start (audioElement);
                 hasStarted = true;
             }
             catch (e)
             {
                 console.warn (e);
             }
+        };
+
+        const audioElement = document.getElementById ("audio-player");
+        const open = document.getElementById ("open-audio-file");
+        open.addEventListener ("change", async (event) =>
+        {
+            await startAudioIfNecessary (audioElement);
+
+            const files = event.target.files || [];
+            if (files.length === 0)
+                return;
+
+            audioElement.pause();
+            audioElement.src = URL.createObjectURL (files[0]);
+            audioElement.load();
         });
 
     </script>
 </head>
 
 <body>
-    <button id="button-start">Start</button>
+    <input id="open-audio-file" type="file" accept="audio/*"/>
     <button id="button-reset">Reset</button>
     <button id="button-cache-state">Cache Current State</button>
     <button id="button-restore-state">Restore Cached State</button>
-    <input id="open-audio-file" type="file" accept="audio/*"/>
     <div id="patch-view-container"></div>
     <audio id="audio-player" controls loop></audio>
 </body>
