@@ -2,7 +2,7 @@ graph TremoloLFO [[ main ]]
 {
     output stream float out;
 
-    input value float shape [[ name: "Shape", min: 0, max: 100, init:100 ]];
+    input value float shape [[ name: "Shape", min: 0, max: 100, init:0 ]];
     input event float rate  [[ name: "Rate", min: 0.1, max: 20, init:8, unit: "Hz" ]];
     input event float depth [[ name: "Depth", min: 0, max: 100, init:100, unit: "%" ]];
 
